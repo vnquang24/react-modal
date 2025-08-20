@@ -1,6 +1,7 @@
 # react-hook-disclosure-modal
 
 [![NPM](https://img.shields.io/npm/v/react-hook-disclosure-modal.svg)](https://www.npmjs.com/package/react-hook-disclosure-modal) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+<p style="text-align:center;"><img width="100%" src="https://clan.akamai.steamstatic.com/images//4/1db230b22124c4c0b99411b39381c5d9c51457d8.png" /></p>
 
 ## Install
 
