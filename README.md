@@ -1,27 +1,45 @@
-# react-hook-disclosure-modal
+# React Hook Disclosure Modal Example
 
-[![NPM](https://img.shields.io/npm/v/react-hook-disclosure-modal.svg)](https://www.npmjs.com/package/react-hook-disclosure-modal) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
-<p style="text-align:center;"><img width="100%" src="https://clan.akamai.steamstatic.com/images//4/1db230b22124c4c0b99411b39381c5d9c51457d8.png" /></p>
+This repository demonstrates how to use **`react-hook-disclosure-modal`** to manage multiple modals in a React application with a clean, hook-based API.  
 
-## Install
+The library provides:  
+- A `ReactHookModalProvider` to manage registered modals.  
+- A `useDisclosure` hook to open, close, and pass data into modals.  
+- Support for multiple modals, each uniquely identified by a `tag`.  
+
+---
+
+## Installation
 
 ```bash
-npm install --save react-hook-disclosure-modal
-```
+npm install react-hook-disclosure-modal
+# or
+yarn add react-hook-disclosure-modal
+# or
+pnpm add react-hook-disclosure-modal
+````
+
+---
 
 ## Usage
 
+### 1. Define Your Modals
+
+Each modal is registered with a unique `tag`.
+The `useDisclosure` hook gives you:
+
+* `isOpen` → boolean to control modal visibility
+* `onOpen` → function to open modal (with optional input)
+* `onClose` → function to close modal
+* `input` → optional data passed to the modal
+
 ```tsx
 import React from 'react'
-import {
-  ReactHookModalProvider,
-  useDisclosure
-} from 'react-hook-disclosure-modal'
+import { Modal } from 'your-ui-library'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const ModalOne = () => {
-  const { isOpen, onClose } = useDisclosure({
-    tag: ModalOne.name
-  })
+  const { isOpen, onClose } = useDisclosure({ tag: 'ModalOne' })
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       Modal One
@@ -30,9 +48,7 @@ const ModalOne = () => {
 }
 
 const ModalTwo = () => {
-  const { isOpen, onClose } = useDisclosure({
-    tag: ModalTwo.name
-  })
+  const { isOpen, onClose } = useDisclosure({ tag: 'ModalTwo' })
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       Modal Two
@@ -40,26 +56,75 @@ const ModalTwo = () => {
   )
 }
 
-const modals = [ModalOne, ModalTwo]
-
-const App = () => {
-  const { onOpen: onOpenOne } = useDisclosure({
-    tag: ModalOne.name
+const ModalThree = () => {
+  const { isOpen, onClose, input } = useDisclosure<string>({
+    tag: 'ModalThree',
   })
-
-  const { onOpen: onOpenTwo } = useDisclosure({
-    tag: ModalTwo.name
-  })
-
   return (
-    <ReactHookModalProvider modals={modals}>
-      Hello world
-      <Button onClick={onOpenOne}>Open Modal One</Button>
-      <Button onClick={onOpenTwo}>Open Modal Two</Button>
-    </ReactHookModalProvider>
+    <Modal isOpen={isOpen} onClose={onClose}>
+      Hello, this is {input}
+    </Modal>
   )
 }
 ```
+
+---
+
+### 2. Register Modals in the Provider
+
+The `ReactHookModalProvider` manages which modals are available globally.
+You just need to pass an array of modal components to it.
+
+```tsx
+import React from 'react'
+import {
+  ReactHookModalProvider,
+  useDisclosure
+} from 'react-hook-disclosure-modal'
+import { Button } from 'your-ui-library'
+
+import { ModalOne, ModalTwo, ModalThree } from './modals'
+
+const modals = [ModalOne, ModalTwo, ModalThree]
+
+const App = () => {
+  const { onOpen: onOpenOne } = useDisclosure({ tag: 'ModalOne' })
+  const { onOpen: onOpenTwo } = useDisclosure({ tag: 'ModalTwo' })
+  const { onOpen: onOpenThree } = useDisclosure<string>({ tag: 'ModalThree' })
+
+  return (
+    <ReactHookModalProvider modals={modals}>
+      <h1>Hello world</h1>
+      <Button onClick={onOpenOne}>Open Modal One</Button>
+      <Button onClick={onOpenTwo}>Open Modal Two</Button>
+      <Button onClick={() => onOpenThree('The third modal')}>
+        Open Modal Three
+      </Button>
+    </ReactHookModalProvider>
+  )
+}
+
+export default App
+```
+
+---
+
+## Features
+
+✅ Simple API with `useDisclosure`
+✅ Manage multiple modals with unique tags
+✅ Pass dynamic data into modals (`input`)
+✅ Works with any UI library (`Modal` component is pluggable)
+
+---
+
+## Example Flow
+
+* **Modal One**: Opens with static content.
+* **Modal Two**: Opens independently.
+* **Modal Three**: Receives dynamic text via `onOpen('The third modal')`.
+
+---
 
 ## License
 
