@@ -1,6 +1,6 @@
 # React Hook Disclosure Modal
 
-[![npm version](https://img.shields.io/npm/v/react-hook-disclosure-modal.svg)](https://www.npmjs.com/package/react-hook-disclosure-modal)
+[![npm version](https://img.shields.io/npm/v/@helloworldqq/react-modal.svg)](https://www.npmjs.com/package/@helloworldqq/react-modal)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Thư viện React hook mạnh mẽ và linh hoạt để quản lý modal với API khai báo rõ ràng. Hoàn hảo cho các ứng dụng cần quản lý nhiều modal với khả năng truyền dữ liệu.
@@ -36,11 +36,11 @@ Thư viện React hook mạnh mẽ và linh hoạt để quản lý modal với 
 ## Cài Đặt
 
 ```bash
-npm install react-hook-disclosure-modal
+npm install @helloworldqq/react-modal
 # hoặc
-yarn add react-hook-disclosure-modal
+yarn add @helloworldqq/react-modal
 # hoặc
-pnpm add react-hook-disclosure-modal
+pnpm add @helloworldqq/react-modal
 ```
 
 ---
@@ -49,7 +49,7 @@ pnpm add react-hook-disclosure-modal
 
 ```tsx
 import React from 'react'
-import { ReactHookModalProvider, useDisclosure } from 'react-hook-disclosure-modal'
+import { ReactHookModalProvider, useDisclosure } from '@helloworldqq/react-modal'
 import { Modal, Button } from 'antd'
 
 // 1. Định nghĩa component modal của bạn
@@ -324,7 +324,7 @@ onOpen({ wrong: 'data' })             // ❌ Lỗi kiểu
 
 ```tsx
 import { Modal, Button } from 'antd'
-import { useDisclosure } from 'react-hook-disclosure-modal'
+import { useDisclosure } from '@helloworldqq/react-modal'
 
 const BasicModal = () => {
   const { isOpen, onClose } = useDisclosure({ tag: 'BasicModal' })
@@ -480,7 +480,7 @@ Ví dụ hoàn chỉnh với Ant Design 6:
 ```tsx
 import React from 'react'
 import { Modal, Button, Space, Form, Input, message } from 'antd'
-import { ReactHookModalProvider, useDisclosure } from 'react-hook-disclosure-modal'
+import { ReactHookModalProvider, useDisclosure } from '@helloworldqq/react-modal'
 
 // Các Component Modal
 const WelcomeModal = () => {

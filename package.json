@@ -1,8 +1,8 @@
 {
-  "name": "react-hook-disclosure-modal",
-  "version": "3.0.0",
+  "name": "@helloworldqq/react-modal",
+  "version": "1.0.1",
   "description": "React hook disclosure modal - A powerful and flexible React hook library for managing modals",
-  "author": "vnquang24",
+  "author": "helloworldqq",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -11,6 +11,9 @@
   "homepage": "https://github.com/vnquang24/react-modal#readme",
   "bugs": {
     "url": "https://github.com/vnquang24/react-modal/issues"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "keywords": [
     "react",
@@ -28,11 +31,9 @@
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
   "source": "src/index.tsx",
+  "types": "dist/index.d.ts",
   "engines": {
     "node": ">=18"
-  },
-  "bin": {
-    "generate": "dist/cli.js"
   },
   "scripts": {
     "build": "microbundle-crl --no-compress --format modern,cjs",
