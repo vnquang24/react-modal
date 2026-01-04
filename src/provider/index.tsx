@@ -1,16 +1,22 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, memo } from 'react'
 import { useModalStore, State } from '../store'
 
-export const ModalWrapper = ({
+type ModalComponent = React.FunctionComponent<any> | React.ComponentType<any>
+
+export interface ModalWrapperProps {
+  modals: Record<string, ModalComponent>
+}
+
+export const ModalWrapper = memo(function ModalWrapper({
   modals
-}: {
-  modals: Record<string, React.FunctionComponent>
-}) => {
-  const isOpens = useModalStore((state: State) => state.modalTags)
+}: ModalWrapperProps) {
+  const modalTags = useModalStore((state: State) => state.modalTags)
+  
   const modalOpened = useMemo(() => {
     return Object.entries(modals)
-      .filter(([tag]) => !!isOpens[tag]?.input)
-      .map(([_, Modal]) => <Modal key={Modal.name} />)
-  }, [isOpens])
+      .filter(([tag]) => !!modalTags[tag]?.input)
+      .map(([tag, Modal]) => <Modal key={tag} />)
+  }, [modals, modalTags])
+  
   return <React.Fragment>{modalOpened}</React.Fragment>
-}
+})

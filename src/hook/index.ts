@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useCallback, useRef } from 'react'
 import { TagType } from './tag'
 import { useModalStore, useModalActions, store } from '../store'
 
@@ -19,6 +19,10 @@ export const useDisclosure = <Input = Any, Output = Any>(
   disclosureHook: DisclosureHookProps<Output>
 ) => {
   const tag = disclosureHook.tag
+  
+  // Use refs to store callbacks to avoid stale closures
+  const disclosureHookRef = useRef(disclosureHook)
+  disclosureHookRef.current = disclosureHook
 
   const inputState = useModalStore(
     (state) => state.modalTags[tag]?.input
@@ -35,57 +39,55 @@ export const useDisclosure = <Input = Any, Output = Any>(
   const onCloseAction = useModalActions((actions) => actions.closeModal)
   const onToggleAction = useModalActions((actions) => actions.toggleModal)
 
-  const updateInput = (input?: Input) => {
+  const updateInput = useCallback((input?: Input) => {
     // If input is a function, call it and set the result as input
-    if (input && typeof input == 'object' && 'preventDefault' in input) {
-      input = undefined
+    let processedInput = input
+    if (processedInput && typeof processedInput == 'object' && 'preventDefault' in processedInput) {
+      processedInput = undefined
     }
-    onOpenAction(tag, input as Any)
-  }
+    onOpenAction(tag, processedInput as Any)
+  }, [tag, onOpenAction])
 
-  const onOpen = (input?: Input) => {
+  const onOpen = useCallback((input?: Input) => {
     updateInput(input)
-    disclosureHook?.onOpen?.()
-  }
-  const onClose = () => {
+    disclosureHookRef.current?.onOpen?.()
+  }, [updateInput])
+
+  const onClose = useCallback(() => {
     onCloseAction(tag)
-    disclosureHook?.onClose?.()
-  }
-  const onToggle = () => {
+    disclosureHookRef.current?.onClose?.()
+  }, [tag, onCloseAction])
+
+  const onToggle = useCallback(() => {
     onToggleAction(tag)
-    disclosureHook?.onToggle?.()
-  }
+    disclosureHookRef.current?.onToggle?.()
+  }, [tag, onToggleAction])
 
-  useEffect(() => {
-    if (inputState) {
-      onOpen(inputState as Input)
-    } else {
-      onClose()
-    }
-    return () => {
-      clearDisclosureTag(tag)
-    }
-  }, [inputState])
-
-  useEffect(() => {
-    if (outputState) {
-      onOk(outputState as Output)
-    }
-  }, [outputState])
-
-  const onOk = (output?: Output) => {
-    disclosureHook?.onOk?.(output)
+  const onOk = useCallback((output?: Output) => {
+    disclosureHookRef.current?.onOk?.(output)
     okAction(tag, output as Any)
-  }
+  }, [tag, okAction])
 
-  const onChange = (isOpen: boolean) => {
+  const onChange = useCallback((isOpen: boolean) => {
     if (isOpen) {
       onOpen()
     } else {
       onClose()
     }
-    disclosureHook && disclosureHook.onChange && disclosureHook.onChange(isOpen)
-  }
+    disclosureHookRef.current?.onChange?.(isOpen)
+  }, [onOpen, onClose])
+
+  useEffect(() => {
+    return () => {
+      clearDisclosureTag(tag)
+    }
+  }, [tag, clearDisclosureTag])
+
+  useEffect(() => {
+    if (outputState) {
+      onOk(outputState as Output)
+    }
+  }, [outputState, onOk])
 
   return {
     isOpen: !!inputState,

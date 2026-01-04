@@ -1,9 +1,13 @@
 import * as React from 'react'
 import { ModalWrapper } from './provider'
+
+type ModalComponent = React.FunctionComponent<any> | React.ComponentType<any>
+
 export type ReactHookModalProviderProps = {
   children: React.ReactNode
-  modals: Record<string, React.FunctionComponent>
+  modals: Record<string, ModalComponent>
 }
+
 export const ReactHookModalProvider = ({
   children,
   modals
@@ -15,4 +19,6 @@ export const ReactHookModalProvider = ({
     </React.Fragment>
   )
 }
+
 export * from './hook'
+export * from './provider'
