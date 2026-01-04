@@ -3,67 +3,67 @@
 [![npm version](https://img.shields.io/npm/v/react-hook-disclosure-modal.svg)](https://www.npmjs.com/package/react-hook-disclosure-modal)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A powerful and flexible React hook library for managing modals with a clean, declarative API. Perfect for applications that need to manage multiple modals with data passing capabilities.
+Thư viện React hook mạnh mẽ và linh hoạt để quản lý modal với API khai báo rõ ràng. Hoàn hảo cho các ứng dụng cần quản lý nhiều modal với khả năng truyền dữ liệu.
 
-**Compatible with React 16.8+, 17, 18, and 19 (including 19.2.3)** and works seamlessly with UI libraries like **Ant Design 6**, **Material UI**, **Chakra UI**, etc.
+**Tương thích với React 16.8+, 17, 18 và 19 (bao gồm 19.2.3)** và hoạt động tốt với các thư viện UI như **Ant Design 6**, **Material UI**, **Chakra UI**, v.v.
 
 ---
 
-## Table of Contents
+## Mục Lục
 
-- [Installation](#installation)
-- [Quick Start](#quick-start)
-- [API Reference](#api-reference)
+- [Cài Đặt](#cài-đặt)
+- [Bắt Đầu Nhanh](#bắt-đầu-nhanh)
+- [Tài Liệu API](#tài-liệu-api)
   - [ReactHookModalProvider](#reacthookmodalprovider)
   - [useDisclosure Hook](#usedisclosure-hook)
-  - [Hook Options (DisclosureHookProps)](#hook-options-disclosurehookprops)
-  - [Hook Return Values](#hook-return-values)
-- [Advanced Usage](#advanced-usage)
-  - [Passing Data to Modals](#passing-data-to-modals)
-  - [Returning Data from Modals (onOk)](#returning-data-from-modals-onok)
-  - [Using Callbacks](#using-callbacks)
-  - [TypeScript Support](#typescript-support)
-- [Examples](#examples)
-  - [Basic Modal](#basic-modal)
-  - [Confirmation Modal](#confirmation-modal)
-  - [Form Modal with Data Return](#form-modal-with-data-return)
-  - [With Ant Design 6](#with-ant-design-6)
-- [Compatibility](#compatibility)
-- [License](#license)
+  - [Các Tùy Chọn Hook (DisclosureHookProps)](#các-tùy-chọn-hook-disclosurehookprops)
+  - [Giá Trị Trả Về Của Hook](#giá-trị-trả-về-của-hook)
+- [Sử Dụng Nâng Cao](#sử-dụng-nâng-cao)
+  - [Truyền Dữ Liệu Vào Modal](#truyền-dữ-liệu-vào-modal)
+  - [Trả Dữ Liệu Từ Modal (onOk)](#trả-dữ-liệu-từ-modal-onok)
+  - [Sử Dụng Callbacks](#sử-dụng-callbacks)
+  - [Hỗ Trợ TypeScript](#hỗ-trợ-typescript)
+- [Ví Dụ](#ví-dụ)
+  - [Modal Cơ Bản](#modal-cơ-bản)
+  - [Modal Xác Nhận](#modal-xác-nhận)
+  - [Modal Form Với Trả Dữ Liệu](#modal-form-với-trả-dữ-liệu)
+  - [Với Ant Design 6](#với-ant-design-6)
+- [Tương Thích](#tương-thích)
+- [Giấy Phép](#giấy-phép)
 
 ---
 
-## Installation
+## Cài Đặt
 
 ```bash
 npm install react-hook-disclosure-modal
-# or
+# hoặc
 yarn add react-hook-disclosure-modal
-# or
+# hoặc
 pnpm add react-hook-disclosure-modal
 ```
 
 ---
 
-## Quick Start
+## Bắt Đầu Nhanh
 
 ```tsx
 import React from 'react'
 import { ReactHookModalProvider, useDisclosure } from 'react-hook-disclosure-modal'
 import { Modal, Button } from 'antd'
 
-// 1. Define your modal component
+// 1. Định nghĩa component modal của bạn
 const MyModal = () => {
   const { isOpen, onClose } = useDisclosure({ tag: 'MyModal' })
   
   return (
-    <Modal open={isOpen} onCancel={onClose} onOk={onClose} title="My Modal">
-      Hello World!
+    <Modal open={isOpen} onCancel={onClose} onOk={onClose} title="Modal Của Tôi">
+      Xin chào!
     </Modal>
   )
 }
 
-// 2. Register modals and use them
+// 2. Đăng ký modals và sử dụng
 const modals = { MyModal }
 
 const App = () => {
@@ -71,7 +71,7 @@ const App = () => {
   
   return (
     <ReactHookModalProvider modals={modals}>
-      <Button onClick={onOpen}>Open Modal</Button>
+      <Button onClick={onOpen}>Mở Modal</Button>
     </ReactHookModalProvider>
   )
 }
@@ -79,11 +79,11 @@ const App = () => {
 
 ---
 
-## API Reference
+## Tài Liệu API
 
 ### ReactHookModalProvider
 
-The provider component that manages all registered modals.
+Component provider quản lý tất cả các modal đã đăng ký.
 
 ```tsx
 <ReactHookModalProvider modals={modals}>
@@ -91,108 +91,108 @@ The provider component that manages all registered modals.
 </ReactHookModalProvider>
 ```
 
-| Prop | Type | Required | Description |
-|------|------|----------|-------------|
-| `modals` | `Record<string, React.ComponentType>` | ✅ | Object with modal components, keys are the tags |
-| `children` | `React.ReactNode` | ✅ | Your application components |
+| Prop | Kiểu | Bắt buộc | Mô tả |
+|------|------|----------|-------|
+| `modals` | `Record<string, React.ComponentType>` | ✅ | Object chứa các component modal, key là tag |
+| `children` | `React.ReactNode` | ✅ | Các component con của ứng dụng |
 
 ---
 
 ### useDisclosure Hook
 
-The main hook to control modal state.
+Hook chính để điều khiển trạng thái modal.
 
 ```tsx
 const disclosure = useDisclosure<Input, Output>(options)
 ```
 
-#### Generic Types
+#### Kiểu Generic
 
-| Type | Default | Description |
-|------|---------|-------------|
-| `Input` | `Any` | Type of data passed TO the modal via `onOpen(input)` |
-| `Output` | `Any` | Type of data returned FROM the modal via `onOk(output)` |
+| Kiểu | Mặc định | Mô tả |
+|------|----------|-------|
+| `Input` | `Any` | Kiểu dữ liệu truyền VÀO modal qua `onOpen(input)` |
+| `Output` | `Any` | Kiểu dữ liệu trả về TỪ modal qua `onOk(output)` |
 
 ---
 
-### Hook Options (DisclosureHookProps)
+### Các Tùy Chọn Hook (DisclosureHookProps)
 
 ```tsx
 interface DisclosureHookProps<Output> {
-  tag: string           // Required: Unique identifier for the modal
-  isOpen?: boolean      // Optional: Initial open state
-  onOpen?: () => void   // Optional: Callback when modal opens
-  onClose?: () => void  // Optional: Callback when modal closes
-  onToggle?: () => void // Optional: Callback when modal toggles
-  onChange?: (isOpen: boolean) => void  // Optional: Callback when state changes
-  onOk?: (output?: Output) => void      // Optional: Callback when onOk is called
-  onCancel?: () => void // Optional: Callback when cancelled
+  tag: string           // Bắt buộc: Định danh duy nhất cho modal
+  isOpen?: boolean      // Tùy chọn: Trạng thái mở ban đầu
+  onOpen?: () => void   // Tùy chọn: Callback khi modal mở
+  onClose?: () => void  // Tùy chọn: Callback khi modal đóng
+  onToggle?: () => void // Tùy chọn: Callback khi modal chuyển đổi trạng thái
+  onChange?: (isOpen: boolean) => void  // Tùy chọn: Callback khi trạng thái thay đổi
+  onOk?: (output?: Output) => void      // Tùy chọn: Callback khi onOk được gọi
+  onCancel?: () => void // Tùy chọn: Callback khi hủy
 }
 ```
 
-| Option | Type | Required | Description |
-|--------|------|----------|-------------|
-| `tag` | `string` | ✅ | Unique identifier for the modal. Must match the key in `modals` object |
-| `isOpen` | `boolean` | ❌ | Initial open state (rarely needed) |
-| `onOpen` | `() => void` | ❌ | Callback triggered when modal opens |
-| `onClose` | `() => void` | ❌ | Callback triggered when modal closes |
-| `onToggle` | `() => void` | ❌ | Callback triggered when modal toggles |
-| `onChange` | `(isOpen: boolean) => void` | ❌ | Callback triggered when open state changes |
-| `onOk` | `(output?: Output) => void` | ❌ | Callback triggered when `onOk` is called with output data |
-| `onCancel` | `() => void` | ❌ | Callback triggered when cancelled |
+| Tùy chọn | Kiểu | Bắt buộc | Mô tả |
+|----------|------|----------|-------|
+| `tag` | `string` | ✅ | Định danh duy nhất cho modal. Phải khớp với key trong object `modals` |
+| `isOpen` | `boolean` | ❌ | Trạng thái mở ban đầu (ít khi cần) |
+| `onOpen` | `() => void` | ❌ | Callback được kích hoạt khi modal mở |
+| `onClose` | `() => void` | ❌ | Callback được kích hoạt khi modal đóng |
+| `onToggle` | `() => void` | ❌ | Callback được kích hoạt khi modal chuyển đổi trạng thái |
+| `onChange` | `(isOpen: boolean) => void` | ❌ | Callback được kích hoạt khi trạng thái mở thay đổi |
+| `onOk` | `(output?: Output) => void` | ❌ | Callback được kích hoạt khi `onOk` được gọi với dữ liệu output |
+| `onCancel` | `() => void` | ❌ | Callback được kích hoạt khi hủy |
 
 ---
 
-### Hook Return Values
+### Giá Trị Trả Về Của Hook
 
 ```tsx
 const {
-  isOpen,      // boolean: Current open state
-  input,       // Input | undefined: Data passed to modal
-  onOpen,      // (input?: Input) => void: Open the modal
-  onClose,     // () => void: Close the modal
-  onToggle,    // () => void: Toggle modal state
-  onOk,        // (output?: Output) => void: Confirm and pass data back
-  onChange,    // (isOpen: boolean) => void: Set open state directly
-  updateInput, // (input?: Input) => void: Update input without triggering onOpen callback
-  store        // Store: Direct access to the store (advanced usage)
+  isOpen,      // boolean: Trạng thái mở hiện tại
+  input,       // Input | undefined: Dữ liệu được truyền vào modal
+  onOpen,      // (input?: Input) => void: Mở modal
+  onClose,     // () => void: Đóng modal
+  onToggle,    // () => void: Chuyển đổi trạng thái modal
+  onOk,        // (output?: Output) => void: Xác nhận và truyền dữ liệu về
+  onChange,    // (isOpen: boolean) => void: Đặt trạng thái mở trực tiếp
+  updateInput, // (input?: Input) => void: Cập nhật input mà không kích hoạt callback onOpen
+  store        // Store: Truy cập trực tiếp store (sử dụng nâng cao)
 } = useDisclosure(options)
 ```
 
-| Return Value | Type | Description |
-|--------------|------|-------------|
-| `isOpen` | `boolean` | Whether the modal is currently open |
-| `input` | `Input \| undefined` | Data passed to the modal via `onOpen(data)` |
-| `onOpen` | `(input?: Input) => void` | Opens the modal, optionally with input data |
-| `onClose` | `() => void` | Closes the modal |
-| `onToggle` | `() => void` | Toggles the modal open/closed |
-| `onOk` | `(output?: Output) => void` | Closes modal and triggers `onOk` callback with output |
-| `onChange` | `(isOpen: boolean) => void` | Directly set the open state |
-| `updateInput` | `(input?: Input) => void` | Update input data without triggering callbacks |
-| `store` | `Store` | Direct access to TanStack Store (advanced) |
+| Giá trị trả về | Kiểu | Mô tả |
+|----------------|------|-------|
+| `isOpen` | `boolean` | Modal có đang mở hay không |
+| `input` | `Input \| undefined` | Dữ liệu được truyền vào modal qua `onOpen(data)` |
+| `onOpen` | `(input?: Input) => void` | Mở modal, có thể kèm dữ liệu input |
+| `onClose` | `() => void` | Đóng modal |
+| `onToggle` | `() => void` | Chuyển đổi trạng thái mở/đóng của modal |
+| `onOk` | `(output?: Output) => void` | Đóng modal và kích hoạt callback `onOk` với output |
+| `onChange` | `(isOpen: boolean) => void` | Đặt trạng thái mở trực tiếp |
+| `updateInput` | `(input?: Input) => void` | Cập nhật dữ liệu input mà không kích hoạt callbacks |
+| `store` | `Store` | Truy cập trực tiếp TanStack Store (nâng cao) |
 
 ---
 
-## Advanced Usage
+## Sử Dụng Nâng Cao
 
-### Passing Data to Modals
+### Truyền Dữ Liệu Vào Modal
 
-Pass data when opening a modal:
+Truyền dữ liệu khi mở modal:
 
 ```tsx
-// Parent component
+// Component cha
 const { onOpen } = useDisclosure<UserData>({ tag: 'EditUserModal' })
 
-// Open with data
-onOpen({ id: 1, name: 'John', email: 'john@example.com' })
+// Mở với dữ liệu
+onOpen({ id: 1, name: 'Nguyễn Văn A', email: 'nguyenvana@example.com' })
 
-// Inside the modal
+// Bên trong modal
 const EditUserModal = () => {
   const { isOpen, input, onClose } = useDisclosure<UserData>({ tag: 'EditUserModal' })
   
   return (
     <Modal open={isOpen} onCancel={onClose}>
-      <p>Editing: {input?.name}</p>
+      <p>Đang chỉnh sửa: {input?.name}</p>
       <p>Email: {input?.email}</p>
     </Modal>
   )
@@ -201,27 +201,27 @@ const EditUserModal = () => {
 
 ---
 
-### Returning Data from Modals (onOk)
+### Trả Dữ Liệu Từ Modal (onOk)
 
-Return data from a modal to the parent component:
+Trả dữ liệu từ modal về component cha:
 
 ```tsx
-// Parent component - receives data via onOk callback
+// Component cha - nhận dữ liệu qua callback onOk
 const { onOpen } = useDisclosure<void, FormData>({
   tag: 'FormModal',
   onOk: (result) => {
-    console.log('Form submitted:', result)
-    // result is typed as FormData
+    console.log('Form đã gửi:', result)
+    // result được định kiểu là FormData
   }
 })
 
-// Inside the modal - sends data back
+// Bên trong modal - gửi dữ liệu về
 const FormModal = () => {
   const { isOpen, onClose, onOk } = useDisclosure<void, FormData>({ tag: 'FormModal' })
   const [formData, setFormData] = useState<FormData>({ name: '', email: '' })
   
   const handleSubmit = () => {
-    onOk(formData)  // This triggers the onOk callback in parent
+    onOk(formData)  // Kích hoạt callback onOk ở component cha
     onClose()
   }
   
@@ -238,57 +238,57 @@ const FormModal = () => {
 
 ---
 
-### Using Callbacks
+### Sử Dụng Callbacks
 
-All lifecycle callbacks:
+Tất cả các callback vòng đời:
 
 ```tsx
 const { onOpen, onClose } = useDisclosure({
   tag: 'MyModal',
   
-  // Called when modal opens
+  // Được gọi khi modal mở
   onOpen: () => {
-    console.log('Modal opened')
+    console.log('Modal đã mở')
     analytics.track('modal_opened')
   },
   
-  // Called when modal closes
+  // Được gọi khi modal đóng
   onClose: () => {
-    console.log('Modal closed')
+    console.log('Modal đã đóng')
     form.reset()
   },
   
-  // Called when modal toggles
+  // Được gọi khi modal chuyển đổi trạng thái
   onToggle: () => {
-    console.log('Modal toggled')
+    console.log('Modal đã chuyển đổi trạng thái')
   },
   
-  // Called when open state changes (either way)
+  // Được gọi khi trạng thái mở thay đổi (cả hai hướng)
   onChange: (isOpen) => {
-    console.log('Modal state changed:', isOpen)
+    console.log('Trạng thái modal đã thay đổi:', isOpen)
   },
   
-  // Called when onOk is triggered with data
+  // Được gọi khi onOk được kích hoạt với dữ liệu
   onOk: (output) => {
-    console.log('Modal confirmed with:', output)
+    console.log('Modal đã xác nhận với:', output)
     saveData(output)
   },
   
-  // Called when cancelled
+  // Được gọi khi hủy
   onCancel: () => {
-    console.log('Modal cancelled')
+    console.log('Modal đã bị hủy')
   }
 })
 ```
 
 ---
 
-### TypeScript Support
+### Hỗ Trợ TypeScript
 
-Full TypeScript support with generics:
+Hỗ trợ TypeScript đầy đủ với generics:
 
 ```tsx
-// Define your types
+// Định nghĩa các kiểu của bạn
 interface UserInput {
   userId: number
   mode: 'edit' | 'view'
@@ -300,27 +300,27 @@ interface UserOutput {
   saved: boolean
 }
 
-// Use with generics
+// Sử dụng với generics
 const { onOpen, input } = useDisclosure<UserInput, UserOutput>({
   tag: 'UserModal',
   onOk: (output) => {
-    // output is typed as UserOutput | undefined
+    // output được định kiểu là UserOutput | undefined
     if (output?.saved) {
-      toast.success(`Saved ${output.name}`)
+      toast.success(`Đã lưu ${output.name}`)
     }
   }
 })
 
-// TypeScript knows the types
-onOpen({ userId: 1, mode: 'edit' })  // ✅ Correct
-onOpen({ wrong: 'data' })             // ❌ Type error
+// TypeScript biết các kiểu
+onOpen({ userId: 1, mode: 'edit' })  // ✅ Đúng
+onOpen({ wrong: 'data' })             // ❌ Lỗi kiểu
 ```
 
 ---
 
-## Examples
+## Ví Dụ
 
-### Basic Modal
+### Modal Cơ Bản
 
 ```tsx
 import { Modal, Button } from 'antd'
@@ -334,21 +334,21 @@ const BasicModal = () => {
       open={isOpen} 
       onCancel={onClose} 
       onOk={onClose}
-      title="Basic Modal"
+      title="Modal Cơ Bản"
     >
-      <p>This is a basic modal with no data passing.</p>
+      <p>Đây là modal cơ bản không có truyền dữ liệu.</p>
     </Modal>
   )
 }
 
-// Usage
+// Sử dụng
 const { onOpen } = useDisclosure({ tag: 'BasicModal' })
-<Button onClick={onOpen}>Open Basic Modal</Button>
+<Button onClick={onOpen}>Mở Modal Cơ Bản</Button>
 ```
 
 ---
 
-### Confirmation Modal
+### Modal Xác Nhận
 
 ```tsx
 const ConfirmDeleteModal = () => {
@@ -357,12 +357,12 @@ const ConfirmDeleteModal = () => {
   })
   
   const handleConfirm = () => {
-    onOk(true)  // Return true to indicate confirmation
+    onOk(true)  // Trả về true để chỉ ra đã xác nhận
     onClose()
   }
   
   const handleCancel = () => {
-    onOk(false) // Return false to indicate cancellation
+    onOk(false) // Trả về false để chỉ ra đã hủy
     onClose()
   }
   
@@ -371,34 +371,34 @@ const ConfirmDeleteModal = () => {
       open={isOpen} 
       onCancel={handleCancel}
       onOk={handleConfirm}
-      title="Confirm Delete"
-      okText="Delete"
+      title="Xác Nhận Xóa"
+      okText="Xóa"
       okType="danger"
     >
-      <p>Are you sure you want to delete "{input?.itemName}"?</p>
+      <p>Bạn có chắc chắn muốn xóa "{input?.itemName}" không?</p>
     </Modal>
   )
 }
 
-// Usage
+// Sử dụng
 const { onOpen } = useDisclosure<{ itemId: number; itemName: string }, boolean>({
   tag: 'ConfirmDelete',
   onOk: (confirmed) => {
     if (confirmed) {
       deleteItem(itemId)
-      toast.success('Item deleted!')
+      toast.success('Đã xóa thành công!')
     }
   }
 })
 
-<Button danger onClick={() => onOpen({ itemId: 123, itemName: 'My Item' })}>
-  Delete Item
+<Button danger onClick={() => onOpen({ itemId: 123, itemName: 'Mục của tôi' })}>
+  Xóa Mục
 </Button>
 ```
 
 ---
 
-### Form Modal with Data Return
+### Modal Form Với Trả Dữ Liệu
 
 ```tsx
 interface FormInput {
@@ -425,7 +425,7 @@ const UserFormModal = () => {
   
   const handleSubmit = async () => {
     const values = await form.validateFields()
-    onOk(values)  // Return form data to parent
+    onOk(values)  // Trả dữ liệu form về component cha
     onClose()
     form.resetFields()
   }
@@ -435,13 +435,13 @@ const UserFormModal = () => {
       open={isOpen} 
       onCancel={onClose}
       onOk={handleSubmit}
-      title={input?.initialData ? 'Edit User' : 'Create User'}
+      title={input?.initialData ? 'Chỉnh Sửa Người Dùng' : 'Tạo Người Dùng'}
     >
       <Form form={form} layout="vertical">
-        <Form.Item name="name" label="Name" rules={[{ required: true }]}>
+        <Form.Item name="name" label="Tên" rules={[{ required: true, message: 'Vui lòng nhập tên' }]}>
           <Input />
         </Form.Item>
-        <Form.Item name="email" label="Email" rules={[{ required: true, type: 'email' }]}>
+        <Form.Item name="email" label="Email" rules={[{ required: true, type: 'email', message: 'Vui lòng nhập email hợp lệ' }]}>
           <Input />
         </Form.Item>
       </Form>
@@ -449,48 +449,48 @@ const UserFormModal = () => {
   )
 }
 
-// Usage - Create new user
+// Sử dụng - Tạo người dùng mới
 const { onOpen: openCreate } = useDisclosure<FormInput, FormOutput>({
   tag: 'UserForm',
   onOk: (userData) => {
     createUser(userData)
-    toast.success('User created!')
+    toast.success('Đã tạo người dùng!')
   }
 })
 
-// Usage - Edit existing user
+// Sử dụng - Chỉnh sửa người dùng hiện có
 const { onOpen: openEdit } = useDisclosure<FormInput, FormOutput>({
   tag: 'UserForm',
   onOk: (userData) => {
     updateUser(userId, userData)
-    toast.success('User updated!')
+    toast.success('Đã cập nhật người dùng!')
   }
 })
 
-<Button onClick={() => openCreate({})}>Create User</Button>
-<Button onClick={() => openEdit({ initialData: existingUser })}>Edit User</Button>
+<Button onClick={() => openCreate({})}>Tạo Người Dùng</Button>
+<Button onClick={() => openEdit({ initialData: existingUser })}>Chỉnh Sửa Người Dùng</Button>
 ```
 
 ---
 
-### With Ant Design 6
+### Với Ant Design 6
 
-Complete example with Ant Design 6:
+Ví dụ hoàn chỉnh với Ant Design 6:
 
 ```tsx
 import React from 'react'
 import { Modal, Button, Space, Form, Input, message } from 'antd'
 import { ReactHookModalProvider, useDisclosure } from 'react-hook-disclosure-modal'
 
-// Modal Components
+// Các Component Modal
 const WelcomeModal = () => {
   const { isOpen, onClose, input } = useDisclosure<{ username: string }>({
     tag: 'WelcomeModal'
   })
   
   return (
-    <Modal open={isOpen} onCancel={onClose} onOk={onClose} title="Welcome!">
-      <p>Hello, {input?.username}! Welcome to our application.</p>
+    <Modal open={isOpen} onCancel={onClose} onOk={onClose} title="Chào Mừng!">
+      <p>Xin chào, {input?.username}! Chào mừng bạn đến với ứng dụng của chúng tôi.</p>
     </Modal>
   )
 }
@@ -506,19 +506,19 @@ const SettingsModal = () => {
   }
   
   return (
-    <Modal open={isOpen} onCancel={onClose} onOk={handleSave} title="Settings">
-      <p>Configure your settings here...</p>
+    <Modal open={isOpen} onCancel={onClose} onOk={handleSave} title="Cài Đặt">
+      <p>Cấu hình cài đặt của bạn tại đây...</p>
     </Modal>
   )
 }
 
-// Register all modals
+// Đăng ký tất cả modals
 const modals = {
   WelcomeModal,
   SettingsModal
 }
 
-// Main App
+// Ứng dụng chính
 const App = () => {
   const { onOpen: openWelcome } = useDisclosure<{ username: string }>({
     tag: 'WelcomeModal'
@@ -527,18 +527,18 @@ const App = () => {
   const { onOpen: openSettings } = useDisclosure<void, { theme: string }>({
     tag: 'SettingsModal',
     onOk: (settings) => {
-      message.success(`Theme changed to: ${settings?.theme}`)
+      message.success(`Đã đổi theme sang: ${settings?.theme}`)
     }
   })
   
   return (
     <ReactHookModalProvider modals={modals}>
       <Space>
-        <Button type="primary" onClick={() => openWelcome({ username: 'John' })}>
-          Show Welcome
+        <Button type="primary" onClick={() => openWelcome({ username: 'Nguyễn Văn A' })}>
+          Hiển Thị Chào Mừng
         </Button>
         <Button onClick={openSettings}>
-          Open Settings
+          Mở Cài Đặt
         </Button>
       </Space>
     </ReactHookModalProvider>
@@ -550,32 +550,32 @@ export default App
 
 ---
 
-## Compatibility
+## Tương Thích
 
-| React Version | Supported |
-|---------------|-----------|
-| 16.8+         | ✅        |
-| 17.x          | ✅        |
-| 18.x          | ✅        |
-| 19.x          | ✅        |
-
-| UI Library      | Tested |
+| Phiên bản React | Hỗ trợ |
 |-----------------|--------|
-| Ant Design 6    | ✅     |
-| Material UI 5+  | ✅     |
-| Chakra UI 2+    | ✅     |
-| Headless UI     | ✅     |
-| Radix UI        | ✅     |
-| Custom Modals   | ✅     |
+| 16.8+           | ✅     |
+| 17.x            | ✅     |
+| 18.x            | ✅     |
+| 19.x            | ✅     |
+
+| Thư viện UI     | Đã test |
+|-----------------|---------|
+| Ant Design 6    | ✅      |
+| Material UI 5+  | ✅      |
+| Chakra UI 2+    | ✅      |
+| Headless UI     | ✅      |
+| Radix UI        | ✅      |
+| Modal tự viết   | ✅      |
 
 ---
 
 ## Dependencies
 
-- `@tanstack/react-store` - For state management
+- `@tanstack/react-store` - Để quản lý state
 
 ---
 
-## License
+## Giấy Phép
 
 MIT © [vnquang24](https://github.com/vnquang24)
